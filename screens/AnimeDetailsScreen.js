@@ -1,0 +1,162 @@
+import React, { useCallback } from "react";
+import {
+  StyleSheet,
+  Image,
+  ScrollView,
+  View,
+  Text,
+  Dimensions,
+  Button,
+  Linking
+} from "react-native";
+import ReadMore from "react-native-read-more-text";
+
+import { colors } from "../assets/colors";
+
+const AnimeDetailsScreen = ({ route, navigation }) => {
+  const { anime } = route.params;
+  console.log(anime, "anime");
+  const animeGenres = anime.genres.map((item) => item.name).join(" - ");
+  //Todo: Add theme, studio
+  //Todo?: Add broadcast
+
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        <Image
+          style={styles.image}
+          source={{
+            uri: anime.images.jpg.large_image_url
+          }}
+        />
+        {anime.demographics[0] && (
+          <Text style={styles.imageHeader}>{anime.demographics[0].name}</Text>
+        )}
+        <View style={styles.subContainer}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>{anime.title}</Text>
+          </View>
+
+          <View>
+            <Text style={styles.subHeader}>Genres</Text>
+            <Text style={{ fontSize: 18, marginLeft: 5 }}>{animeGenres}</Text>
+          </View>
+          <View style={styles.synopsisContainer}>
+            <Text style={styles.subHeader}>Description</Text>
+            <ReadMore numberOfLines={5}>
+              <Text style={styles.cardText}>{anime.synopsis}</Text>
+            </ReadMore>
+          </View>
+          <OpenURLButton url={anime.trailer.url}>Trailer</OpenURLButton>
+          <View style={{ margin: 15 }} />
+          <AnimeButton status={anime.status} />
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default AnimeDetailsScreen;
+
+const styles = StyleSheet.create({
+  container: { flex: 1, paddingTop: 20 },
+  scrollView: { backgroundColor: "white" },
+  image: {
+    height: Dimensions.get("window").height / 2.5,
+
+    resizeMode: "stretch",
+    width: Dimensions.get("window").width
+  },
+  imageHeader: {
+    position: "absolute",
+    top: 10,
+    right: 20,
+    backgroundColor: "gray",
+    color: "white",
+    fontSize: 15,
+    padding: 10,
+    borderRadius: 30
+  },
+  subContainer: {
+    padding: 5
+  },
+  header: {
+    alignItems: "center"
+  },
+  headerText: {
+    fontSize: 40
+  },
+  detailsContainer: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 10
+  },
+  detailsSubContainer: {
+    borderWidth: 1,
+    borderRadius: 50,
+    padding: 10
+  },
+  detailHeader: {
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  detailInfo: {
+    fontSize: 12,
+    color: colors.gray,
+    textAlign: "center"
+  },
+  synopsisContainer: {
+    padding: 5
+  },
+  subHeader: {
+    fontSize: 20,
+    fontWeight: "bold",
+    margin: 10
+  }
+});
+
+const OpenURLButton = ({ url, children }) => {
+  const handlePress = useCallback(async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, [url]);
+
+  return <Button title={children} onPress={handlePress} />;
+};
+
+const notifyMeWhenReleased = () => alert("Notify when released!!");
+
+const notifyMeWhenFinished = () => alert("Notify when finished!");
+
+const AnimeButton = ({ status }) => {
+  if (status === "Currently Airing")
+    return (
+      <Button
+        onPress={notifyMeWhenFinished}
+        title="Notify me when finished"
+        color="green"
+        accessibilityLabel="Learn more about this purple button"
+      />
+    );
+
+  if (status === "Not yet aired")
+    return (
+      <Button
+        onPress={notifyMeWhenReleased}
+        title="Notify me when released"
+        color="green"
+        accessibilityLabel="Learn more about this purple button"
+      />
+    );
+  return null;
+};
