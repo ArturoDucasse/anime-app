@@ -10,12 +10,12 @@
 
 ## About The Project (still in development)
 
-Application for getting notified when ever your favorite or upcoming anime is gonna be released!
+Application for anime notifications.
 
 ### Key Features
 
-- Get notified when an anime gets finished 
-- Get notified when an anime gets released
+- Get notified when an anime is finished.
+- Get notified when an anime gets released.
 
 ### Built With
 
@@ -27,7 +27,7 @@ Application for getting notified when ever your favorite or upcoming anime is go
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<table>
+<table align='center'>
   <tr>
     <td align="center"><a href="https://arturoducasse.dev/"><img src="https://avatars.githubusercontent.com/u/66644638?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Arturo Ducasse</b></sub></a><br /><a href="https://github.com/chingu-voyages/v33-bears-team-15be/commits?author=ArturoDucasse" title="Code">💻</a></td>
   </tr>
@@ -50,5 +50,6 @@ Licensed under the MIT license. See [MIT](LICENSE) for more information.
 
 - [React Native](https://reactnative.dev/)
 - [Expo](https://expo.dev/)
+- Kudos to [Fatikhan](https://github.com/fatikhan-gasimov/gmail-clone?ref=reactnativeexample.com).
 
 ---
