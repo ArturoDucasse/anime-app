@@ -1,21 +1,19 @@
-import React, { useCallback } from "react";
 import {
   StyleSheet,
   Image,
   ScrollView,
   View,
   Text,
-  Dimensions,
-  Button,
-  Linking
+  Dimensions
 } from "react-native";
 import ReadMore from "react-native-read-more-text";
 
 import { colors } from "../assets/colors";
 
+import { AnimeButton, OpenURLButton } from "../src/components/animeDetails";
+
 const AnimeDetailsScreen = ({ route, navigation }) => {
   const { anime } = route.params;
-  console.log(anime, "anime");
   const animeGenres = anime.genres.map((item) => item.name).join(" - ");
   //Todo: Add theme, studio
   //Todo?: Add broadcast
@@ -116,47 +114,3 @@ const styles = StyleSheet.create({
     margin: 10
   }
 });
-
-const OpenURLButton = ({ url, children }) => {
-  const handlePress = useCallback(async () => {
-    // Checking if the link is supported for links with custom URL scheme.
-    const supported = await Linking.canOpenURL(url);
-
-    if (supported) {
-      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-      // by some browser in the mobile
-      await Linking.openURL(url);
-    } else {
-      Alert.alert(`Don't know how to open this URL: ${url}`);
-    }
-  }, [url]);
-
-  return <Button title={children} onPress={handlePress} />;
-};
-
-const notifyMeWhenReleased = () => alert("Notify when released!!");
-
-const notifyMeWhenFinished = () => alert("Notify when finished!");
-
-const AnimeButton = ({ status }) => {
-  if (status === "Currently Airing")
-    return (
-      <Button
-        onPress={notifyMeWhenFinished}
-        title="Notify me when finished"
-        color="green"
-        accessibilityLabel="Learn more about this purple button"
-      />
-    );
-
-  if (status === "Not yet aired")
-    return (
-      <Button
-        onPress={notifyMeWhenReleased}
-        title="Notify me when released"
-        color="green"
-        accessibilityLabel="Learn more about this purple button"
-      />
-    );
-  return null;
-};
