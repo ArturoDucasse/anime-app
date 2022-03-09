@@ -23,6 +23,7 @@ const HomeScreen = ({ navigation }) => {
     fetchData();
   }, []);
 
+  //Todo: refactor
   const filter = async (input) => {
     if (input.length === 0) {
       return setFilterData(data);
