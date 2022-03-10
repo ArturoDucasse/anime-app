@@ -1,6 +1,7 @@
 import React, { createContext, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AppLoading from "expo-app-loading";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   useFonts,

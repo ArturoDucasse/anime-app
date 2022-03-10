@@ -1,22 +1,45 @@
-import { useContext } from "react";
+import { useState, useEffect } from "react";
 import { View, Text } from "react-native";
+import AsyncStorage, {
+  useAsyncStorage
+} from "@react-native-async-storage/async-storage";
 
-import { UserContext } from "../App";
 import { styles } from "../src/components/profile/styles";
 import List from "../src/components/profile/List";
 
 const ProfileScreen = ({ navigation }) => {
-  const { name, waitingToFinish, waitingToBeReleased } =
-    useContext(UserContext);
+  const [user, setUser] = useState({});
+  const { getItem, setItem } = useAsyncStorage("user");
 
-  return (
+  useEffect(() => {
+    const fetchUser = async () => {
+      const storedUser = await getItem();
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+    };
+    fetchUser();
+  }, []);
+
+  const { name, waitingToFinish, waitingToBeReleased } = user;
+
+  return Object.keys(user).length ? (
     <View style={styles.container}>
       <View style={styles.userNameContainer}>
         <Text style={styles.userName}>{name}</Text>
       </View>
-      {List(waitingToFinish, "Waiting to finish", navigation)}
-      {List(waitingToBeReleased, "Waiting to be released", navigation)}
+      <List
+        animeIds={waitingToFinish}
+        header="Waiting to finish"
+        navigation={navigation}
+      />
+      <List
+        animeIds={waitingToBeReleased}
+        header="Waiting to be released"
+        navigation={navigation}
+      />
     </View>
+  ) : (
+    <Text style={{ paddingTop: 50 }}>Loading</Text>
   );
 };
 

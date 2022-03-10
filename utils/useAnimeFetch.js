@@ -10,14 +10,14 @@ const useAnimeFetch = (animeIdArray) => {
         const response = await fetch(
           `https://api.jikan.moe/v4/anime/${animeId}`
         );
-        const {data} = await response.json();
+        const { data } = await response.json();
         temp.push(data);
       }
       setData(temp);
     };
 
     fetchData();
-  }, [animeIdArray]);
+  }, []);
 
   return data;
 };
