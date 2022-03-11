@@ -1,6 +1,8 @@
-import React, { createContext, useState } from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AppLoading from "expo-app-loading";
+import * as Notifications from "expo-notifications";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
@@ -13,14 +15,22 @@ import {
 
 import RootNavigator from "./navigation/RootNavigator";
 
-export const UserContext = createContext({});
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false
+  })
+});
 
 export default function App() {
-  const [user, setUser] = useState({
-    name: "Mario Sunshine",
-    waitingToFinish: [1],
-    waitingToBeReleased: [1, 5]
-  });
+  useEffect(() => {
+    Notifications.addNotificationReceivedListener((notification) => {
+      //notification.request.content.title : returns the title
+      //notification.request.content.body : returns the body
+      //notification.request.content.data : returns the data
+    });
+  }, []);
 
   let [fontsLoaded] = useFonts({
     Roboto_400Regular,
@@ -33,9 +43,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <UserContext.Provider value={user}>
-        <RootNavigator />
-      </UserContext.Provider>
+      <RootNavigator />
     </NavigationContainer>
   );
 }
