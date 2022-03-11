@@ -9,9 +9,10 @@ import {
   styles
 } from "../src/components/animeDetails";
 
+const { getItem, setItem } = useAsyncStorage("user");
+
 const AnimeDetailsScreen = ({ route }) => {
   const [user, setUser] = useState(null);
-  const { getItem, removeItem } = useAsyncStorage("user");
   const { anime } = route.params;
   const animeGenres = anime.genres.map((item) => item.name).join(" - ");
   //Todo: Add anime theme, studio
@@ -72,7 +73,9 @@ const AnimeDetailsScreen = ({ route }) => {
           {isAnimeSaved(anime.mal_id) ? (
             <Button
               title="Delete from list"
-              onClick={() => deleteAnime(anime.mal_id)}
+              onPress={async () => await deleteAnime(anime.mal_id)}
+              color="red"
+              accessibilityLabel="Delete anime from list"
             />
           ) : (
             <AnimeButton status={anime.status} animeId={anime.mal_id} />
@@ -84,3 +87,29 @@ const AnimeDetailsScreen = ({ route }) => {
 };
 
 export default AnimeDetailsScreen;
+
+const deleteAnime = async (animeId) => {
+  const response = await getItem();
+  const user = JSON.parse(response);
+  if (user.waitingToFinishList && user.waitingToFinishList.includes(animeId)) {
+    const newArray = user.waitingToFinishList.filter((id) => id !== animeId);
+    const newUser = JSON.stringify({ ...user, waitingToFinishList: newArray });
+    console.log(user, "old user");
+    console.log(newUser, "new User");
+    return await setItem(newUser);
+  }
+  if (
+    user.waitingForReleaseList &&
+    user.waitingForReleaseList.includes(animeId)
+  ) {
+    const newArray = user.waitingForReleaseList.filter((id) => id !== animeId);
+    const newUser = JSON.stringify({
+      ...user,
+      waitingForReleaseList: newArray
+    });
+    console.log(user, "old user");
+    console.log(newUser, "new User");
+    return await setItem(newUser);
+  }
+  throw new Error("Anime not found");
+};

@@ -13,28 +13,31 @@ const ProfileScreen = ({ navigation }) => {
     const fetchUser = async () => {
       const storedUser = await getItem();
       const parsedUser = JSON.parse(storedUser);
+      console.log(parsedUser, "user");
       setUser(parsedUser);
     };
     fetchUser();
   }, []);
 
-  const { name, waitingToFinish, waitingToBeReleased } = user;
-
-  return Object.keys(user).length ? (
+  return user ? (
     <View style={styles.container}>
       <View style={styles.userNameContainer}>
-        <Text style={styles.userName}>{name}</Text>
+        <Text style={styles.userName}>Mario</Text>
       </View>
-      <List
-        animeIds={waitingToFinish}
-        header="Waiting to finish"
-        navigation={navigation}
-      />
-      <List
-        animeIds={waitingToBeReleased}
-        header="Waiting to be released"
-        navigation={navigation}
-      />
+      {user.waitingToFinishList && (
+        <List
+          animeIds={user.waitingToFinishList}
+          header="Waiting to finish"
+          navigation={navigation}
+        />
+      )}
+      {user.waitingForReleaseList && (
+        <List
+          animeIds={user.waitingForReleaseList}
+          header="Waiting to be released"
+          navigation={navigation}
+        />
+      )}
     </View>
   ) : (
     <Text style={{ paddingTop: 50 }}>Loading</Text>
