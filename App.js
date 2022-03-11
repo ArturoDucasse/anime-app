@@ -3,8 +3,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import AppLoading from "expo-app-loading";
 import * as Notifications from "expo-notifications";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import {
   useFonts,
   Roboto_400Regular,

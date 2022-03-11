@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, FlatList } from "react-native";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 import { colors } from "../assets/colors";
 import AnimeItem from "../src/components/inbox/AnimeItem";
@@ -10,6 +11,7 @@ import SearchBar from "../src/components/inbox/SearchBar";
 const HomeScreen = ({ navigation }) => {
   const [data, setData] = useState({});
   const [filterData, setFilterData] = useState({});
+  const { removeItem, getItem } = useAsyncStorage("user");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +23,10 @@ const HomeScreen = ({ navigation }) => {
       setFilterData(data);
     };
     fetchData();
+    const reset = async () => {
+      await removeItem();
+    };
+    reset();
   }, []);
 
   //Todo: refactor
