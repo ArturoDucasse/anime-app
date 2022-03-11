@@ -2,7 +2,7 @@ import { View, Text, FlatList } from "react-native";
 
 import { styles } from "./styles";
 import AnimeItem from "./AnimeItem";
-import useAnimeFetch from "../../../utils/useAnimeFetch";
+import useAnimeFetch from "../../../hooks/useAnimeFetch";
 
 const List = ({ animeIds, header, navigation }) => {
   const animes = useAnimeFetch(animeIds);

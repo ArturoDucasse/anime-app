@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, Text } from "react-native";
-import AsyncStorage, {
-  useAsyncStorage
-} from "@react-native-async-storage/async-storage";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 import { styles } from "../src/components/profile/styles";
 import List from "../src/components/profile/List";
