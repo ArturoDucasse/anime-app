@@ -12,6 +12,7 @@ import {
 } from "@expo-google-fonts/roboto";
 
 import RootNavigator from "./navigation/RootNavigator";
+import registerBackgroundFetchAsync from "./utils/backgroundFetch";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -23,7 +24,11 @@ Notifications.setNotificationHandler({
 
 export default function App() {
   useEffect(() => {
-    Notifications.addNotificationReceivedListener((notification) => {
+    const shit = async () => {
+      await registerBackgroundFetchAsync();
+    };
+    shit();
+    Notifications.addNotificationReceivedListener(async (notification) => {
       //notification.request.content.title : returns the title
       //notification.request.content.body : returns the body
       //notification.request.content.data : returns the data
