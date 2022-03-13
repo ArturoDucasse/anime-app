@@ -3,11 +3,13 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 const { getItem, setItem } = useAsyncStorage("user");
 
-const AnimeButton = ({ status, animeId }) => {
+const AnimeButton = ({ status, animeId, updateUser }) => {
   if (status === "Currently Airing")
     return (
       <Button
-        onPress={async () => await addToList("waitingToFinishList", animeId)}
+        onPress={async () =>
+          await addToList("waitingToFinishList", animeId, updateUser)
+        }
         title="Notify me when finished"
         color="green"
         accessibilityLabel="Learn more about this purple button"
@@ -17,7 +19,9 @@ const AnimeButton = ({ status, animeId }) => {
   if (status === "Not yet aired")
     return (
       <Button
-        onPress={async () => await addToList("waitingForReleaseList", animeId)}
+        onPress={async () =>
+          await addToList("waitingForReleaseList", animeId, updateUser)
+        }
         title="Notify me when released"
         color="green"
         accessibilityLabel="Learn more about this purple button"
@@ -28,7 +32,7 @@ const AnimeButton = ({ status, animeId }) => {
 
 export default AnimeButton;
 
-const addToList = async (listName, animeId) => {
+const addToList = async (listName, animeId, updateUser) => {
   const response = await getItem();
   const user = JSON.parse(response);
   if (!response) {
@@ -37,7 +41,7 @@ const addToList = async (listName, animeId) => {
     };
     const jsonUser = JSON.stringify(user);
     setItem(jsonUser);
-    console.log(await getItem(), "inside conditional");
+    updateUser(user);
     return;
   }
 
@@ -49,5 +53,5 @@ const addToList = async (listName, animeId) => {
     [listName]: user[listName] ? [...user[listName], animeId] : [animeId]
   };
   setItem(JSON.stringify(newUser));
-  console.log(await getItem(), "outside conditional");
+  updateUser(newUser);
 };

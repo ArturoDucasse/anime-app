@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Image, ScrollView, View, Text, Button } from "react-native";
 import ReadMore from "react-native-read-more-text";
+import { Image, ScrollView, View, Text, Button } from "react-native";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 import {
@@ -18,6 +18,8 @@ const AnimeDetailsScreen = ({ route }) => {
   //Todo: Add anime theme, studio
   //Todo?: Add broadcast
 
+  const updateUser = (value) => setUser(value);
+
   useEffect(() => {
     const fetchUser = async () => {
       const response = await getItem();
@@ -26,9 +28,6 @@ const AnimeDetailsScreen = ({ route }) => {
     };
     fetchUser();
   }, []);
-
-  //Todo: Delete anime from waitingToFinishList
-  //Todo: Delete anime from waitingForReleaseList
 
   const isAnimeSaved = (animeId) => {
     if (!user) return false;
@@ -73,12 +72,16 @@ const AnimeDetailsScreen = ({ route }) => {
           {isAnimeSaved(anime.mal_id) ? (
             <Button
               title="Delete from list"
-              onPress={async () => await deleteAnime(anime.mal_id)}
+              onPress={async () => await deleteAnime(anime.mal_id, updateUser)}
               color="red"
               accessibilityLabel="Delete anime from list"
             />
           ) : (
-            <AnimeButton status={anime.status} animeId={anime.mal_id} />
+            <AnimeButton
+              status={anime.status}
+              animeId={anime.mal_id}
+              updateUser={updateUser}
+            />
           )}
         </View>
       </ScrollView>
@@ -88,28 +91,28 @@ const AnimeDetailsScreen = ({ route }) => {
 
 export default AnimeDetailsScreen;
 
-const deleteAnime = async (animeId) => {
+const deleteAnime = async (animeId, updateUser) => {
   const response = await getItem();
   const user = JSON.parse(response);
   if (user.waitingToFinishList && user.waitingToFinishList.includes(animeId)) {
     const newArray = user.waitingToFinishList.filter((id) => id !== animeId);
-    const newUser = JSON.stringify({ ...user, waitingToFinishList: newArray });
-    console.log(user, "old user");
-    console.log(newUser, "new User");
-    return await setItem(newUser);
+    const userDetails = { ...user, waitingToFinishList: newArray };
+    const newUser = JSON.stringify(userDetails);
+    await setItem(newUser);
+    return updateUser(userDetails);
   }
   if (
     user.waitingForReleaseList &&
     user.waitingForReleaseList.includes(animeId)
   ) {
     const newArray = user.waitingForReleaseList.filter((id) => id !== animeId);
-    const newUser = JSON.stringify({
+    const userDetails = {
       ...user,
       waitingForReleaseList: newArray
-    });
-    console.log(user, "old user");
-    console.log(newUser, "new User");
-    return await setItem(newUser);
+    };
+    const newUser = JSON.stringify(userDetails);
+    await setItem(newUser);
+    return updateUser(newUser);
   }
   throw new Error("Anime not found");
 };

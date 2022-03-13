@@ -17,7 +17,7 @@ const useAnimeFetch = (animeIdArray) => {
     };
 
     fetchData();
-  }, []);
+  }, [animeIdArray]);
 
   return data;
 };

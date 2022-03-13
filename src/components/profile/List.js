@@ -6,8 +6,6 @@ import useAnimeFetch from "../../../hooks/useAnimeFetch";
 
 const List = ({ animeIds, header, navigation }) => {
   const animes = useAnimeFetch(animeIds);
-  const animesIds = animes.map((anime) => anime.mal_id);
-  console.log(animesIds, "animes");
 
   return (
     <View style={styles.flatListContainer}>

@@ -10,14 +10,14 @@ const ProfileScreen = ({ navigation }) => {
   const { getItem, setItem } = useAsyncStorage("user");
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUser = navigation.addListener("focus", async () => {
       const storedUser = await getItem();
       const parsedUser = JSON.parse(storedUser);
-      console.log(parsedUser, "user");
       setUser(parsedUser);
-    };
-    fetchUser();
-  }, []);
+    });
+
+    return fetchUser;
+  }, [navigation]);
 
   return user ? (
     <View style={styles.container}>
