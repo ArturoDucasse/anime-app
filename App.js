@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import AppLoading from "expo-app-loading";
 import * as Notifications from "expo-notifications";
+import { NavigationContainer } from "@react-navigation/native";
 
 import {
   useFonts,
@@ -21,6 +21,21 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false
   })
 });
+
+//If there's no user return
+//If there's no anime ids return
+
+//If the anime completed is from "Waiting to finish list"
+// Add it to finish list
+// Delete it from waiting to finish list
+// Update user in db
+// Notify the user
+
+//If the anime completed is from "Waiting for release list"
+// Add it to waiting for waiting to finish list
+// Delete it from waiting for release list
+// Update user in db
+// Notify the user
 
 export default function App() {
   useEffect(() => {

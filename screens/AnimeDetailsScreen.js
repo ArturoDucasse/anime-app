@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import ReadMore from "react-native-read-more-text";
 import { Image, ScrollView, View, Text, Button } from "react-native";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
@@ -8,26 +7,18 @@ import {
   OpenURLButton,
   styles
 } from "../src/components/animeDetails";
+import useUserFetch from "../hooks/useUserFetch";
 
 const { getItem, setItem } = useAsyncStorage("user");
 
 const AnimeDetailsScreen = ({ route }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useUserFetch();
   const { anime } = route.params;
   const animeGenres = anime.genres.map((item) => item.name).join(" - ");
   //Todo: Add anime theme, studio
   //Todo?: Add broadcast
 
   const updateUser = (value) => setUser(value);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const response = await getItem();
-      const user = JSON.parse(response);
-      setUser(user);
-    };
-    fetchUser();
-  }, []);
 
   const isAnimeSaved = (animeId) => {
     if (!user) return false;
