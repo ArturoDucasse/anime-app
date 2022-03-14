@@ -11,7 +11,7 @@ import SearchBar from "../src/components/inbox/SearchBar";
 const HomeScreen = ({ navigation }) => {
   const [data, setData] = useState({});
   const [filterData, setFilterData] = useState({});
-  const { removeItem, getItem } = useAsyncStorage("user");
+  const { removeItem, getItem, setItem } = useAsyncStorage("user");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +24,13 @@ const HomeScreen = ({ navigation }) => {
     };
     fetchData();
     const reset = async () => {
-      await removeItem();
+      const testingUser = {
+        waitingToFinishList: [22, 23],
+        waitingForReleaseList: [21]
+      };
+      await setItem(JSON.stringify(testingUser));
+
+      console.log(await getItem());
     };
     reset();
   }, []);

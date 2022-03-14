@@ -1,10 +1,13 @@
-export default async function schedulePushNotification() {
+import * as Notifications from "expo-notifications";
+
+export default async function schedulePushNotification(title, body, animeId) {
+  console.log("Notification!");
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "You've got ma! 📬",
-      body: "Here is the notification body",
-      data: { name: "arthur", email: "arturh2@gmail.cmo" }
+      title: `${title} 📬`,
+      body: `${body}`,
+      data: { screen: "Todo", animeId }
     },
-    trigger: { seconds: 2 }
+    trigger: { seconds: 3 }
   });
 }
