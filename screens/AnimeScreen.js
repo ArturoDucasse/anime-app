@@ -23,6 +23,8 @@ const HomeScreen = ({ navigation }) => {
       setFilterData(data);
     };
     fetchData();
+
+    //Todo: Delete this
     const reset = async () => {
       const testingUser = {
         waitingToFinishList: [22, 23],
